@@ -3556,15 +3556,19 @@ MonoBehaviour:
   letters:
   - code: 52
     buttonAi: {fileID: 336749390}
+    text: {fileID: 1064071738}
     buttonUser: {fileID: 1606812861}
   - code: 51
     buttonAi: {fileID: 657603058}
+    text: {fileID: 583569227}
     buttonUser: {fileID: 296076381}
   - code: 50
     buttonAi: {fileID: 907992682}
+    text: {fileID: 952552277}
     buttonUser: {fileID: 553208405}
   - code: 49
     buttonAi: {fileID: 1314436181}
+    text: {fileID: 899773252}
     buttonUser: {fileID: 1575372642}
   regular: {fileID: 21300000, guid: 46606ae975ad905488ceddd02c827a55, type: 3}
   pressed: {fileID: 21300000, guid: 7346fe044bd9e104084dded29f0e30b3, type: 3}

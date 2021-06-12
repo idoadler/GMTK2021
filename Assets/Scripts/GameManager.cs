@@ -101,6 +101,7 @@ public class GameManager : MonoBehaviour
         {
             letters[i].buttonAi.sprite = regular;
             letters[i].buttonUser.sprite = regular;
+            letters[i].text.color = Color.black;
         }
         letters[currentLetter].buttonUser.sprite = correct;
         letters[currentLetter].buttonAi.sprite = correct;
@@ -118,8 +119,10 @@ public class GameManager : MonoBehaviour
             letters[i].buttonAi.sprite = regular;
             letters[i].buttonUser.sprite = regular;
             letters[i].buttonUser.color = Color.white;
+            letters[i].text.color = Color.black;
         }
         currentLetter = Random.Range(0, topLetter + 1);
+        letters[currentLetter].text.color = Color.white;
         letters[currentLetter].buttonAi.sprite = pressed;
         _climbAnimation.SetSide(false);
     }
@@ -135,6 +138,7 @@ public class GameManager : MonoBehaviour
     {
         public KeyCode code;
         public Image buttonAi;
+        public TextMeshProUGUI text;
         public Image buttonUser;
     }
 }
