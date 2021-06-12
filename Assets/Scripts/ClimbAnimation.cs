@@ -8,11 +8,11 @@ public class ClimbAnimation : MonoBehaviour {
     public Sprite[] spritesLeft;
     public Sprite jump;
     public bool isLeft;
-    public int spritePerFrame = 6;
+    public float timePerFrame = 0.05f;
     public Image image;
 
     private int index = 0;
-    private int frame = 0;
+    private float timeToSwitch = 0;
 
     void Reset() {
         image = GetComponent<Image> ();
@@ -21,18 +21,20 @@ public class ClimbAnimation : MonoBehaviour {
     void Update ()
     {
         var sprites = isLeft ? spritesLeft : spritesRight;
-        if (index+1 >= sprites.Length) return;
-        frame ++;
-        if (frame < spritePerFrame) return;
+        if (index + 1 >= sprites.Length) return;
+        timeToSwitch -= Time.deltaTime;
+        if (timeToSwitch > 0) return;
         index ++;
         image.sprite = sprites [index];
-        frame = 0;
+        timeToSwitch = timePerFrame;
+        if (index + 1 >= sprites.Length)
+            index = -1;
     }
 
     public void SetSide(bool left)
     {
-        isLeft = left;
-        frame = 0;
+        isLeft = left;        
+        timeToSwitch = timePerFrame;
         index = -1;
         image.sprite = jump;
     }
