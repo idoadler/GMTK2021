@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     
     public float stepSize = 0.5f;
     public float fallSize = 0.2f;
+    public float acceleration = 1.2f;
     public float scrollSpeed = 0.5f;
     public float fireSpeed = 1;
     public float timeToNextInput = 0.5f;
@@ -18,7 +19,9 @@ public class GameManager : MonoBehaviour
     public Image lowerBound;
     public Image fire;
     public InputLetter[] letters;
-    
+
+    public Sprite regular;
+    public Sprite selected;
     public Color correct = Color.green;
     public Color wrong = Color.red;
     public Color press = Color.yellow;
@@ -28,10 +31,16 @@ public class GameManager : MonoBehaviour
     public Transform coupleTop;
     public Transform coupleBottom;
     public TextMeshProUGUI setScroll;
-    
+
+    private ClimbAnimation _climbAnimation;
     private float currentAcceleration = 1;
-    private int topLetter = 0;
+    private int topLetter = 3;
     private int currentLetter = -1;
+
+    private void Awake()
+    {
+        _climbAnimation = couple.GetComponent<ClimbAnimation>();
+    }
 
     private void Start()
     {
@@ -49,26 +58,24 @@ public class GameManager : MonoBehaviour
         {
             for (int i = 0; i < letters.Length; i++)
             {
-                if (i > topLetter)
-                {
-                    letters[i].buttonAi.color = disabled;
-                    letters[i].buttonUser.color = disabled;
-                }
-                else
-                {
-                    letters[i].buttonAi.color = Color.white;
-                    letters[i].buttonUser.color = Color.white;
-                }
+                letters[i].buttonAi.sprite = regular;
+                letters[i].buttonUser.sprite = regular;
             }
-            letters[currentLetter].buttonUser.color = correct;
-            couple.transform.localScale = Vector3.one;
+            letters[currentLetter].buttonUser.sprite = selected;
+            // couple.transform.localScale = Vector3.one;
+            _climbAnimation.SetSide(true);
             couple.transform.position +=  Vector3.up * (stepSize * currentAcceleration);
             currentLetter = -1;
             Invoke(nameof(RandomizeLetter), timeToNextInput / currentAcceleration);
         }
 
-        if (topLetter+1 < letters.Length && coupleTop.transform.position.y > letters[topLetter+1].buttonAi.transform.position.y)
+        if (topLetter + 1 < letters.Length &&
+            coupleTop.transform.position.y > letters[topLetter + 1].buttonAi.transform.position.y)
+        {
+            currentAcceleration *= acceleration;
             topLetter++;
+        }
+
         if (coupleBottom.transform.position.y < lowerBound.transform.position.y)
             SceneManager.LoadScene(0);
         if (coupleTop.transform.position.y > upperBound.transform.position.y)
@@ -84,20 +91,12 @@ public class GameManager : MonoBehaviour
     {
         for (var i = 0; i < letters.Length; i++)
         {
-            if (i > topLetter)
-            {
-                letters[i].buttonAi.color = disabled;
-                letters[i].buttonUser.color = disabled;
-            }
-            else
-            {
-                letters[i].buttonAi.color = Color.white;
-                letters[i].buttonUser.color = Color.white;
-            }
+            letters[i].buttonAi.sprite = regular;
+            letters[i].buttonUser.sprite = regular;
         }
-        couple.transform.localScale = new Vector3(-1,1,1);
         currentLetter = Random.Range(0, topLetter + 1);
-        letters[currentLetter].buttonAi.color = Color.yellow;
+        letters[currentLetter].buttonAi.sprite = selected;
+        _climbAnimation.SetSide(false);
     }
 
     public void ToggleGravity()
