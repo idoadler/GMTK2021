@@ -7,10 +7,12 @@ public class ClimbAnimation : MonoBehaviour {
     public Sprite[] spritesRight;
     public Sprite[] spritesLeft;
     public Sprite jump;
+    public Sprite burnt;
     public bool isLeft;
     public float framesPerSecond = 2.5f;
     public float jumpFps = 5f;
     public Image image;
+    private bool killed = false;
 
     private int index = 0;
     private float timeToSwitch = 0;
@@ -21,6 +23,8 @@ public class ClimbAnimation : MonoBehaviour {
 
     void Update ()
     {
+        if(killed)
+            return;
         var sprites = isLeft ? spritesLeft : spritesRight;
         if (index + 1 >= sprites.Length) return;
         timeToSwitch -= Time.deltaTime;
@@ -38,5 +42,11 @@ public class ClimbAnimation : MonoBehaviour {
         timeToSwitch = 1/jumpFps;
         index = -1;
         image.sprite = jump;
+    }
+
+    public void Kill()
+    {
+        image.sprite = burnt;
+        killed = true;
     }
 }
