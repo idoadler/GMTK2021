@@ -14,7 +14,7 @@ public class RestoreScore : MonoBehaviour
         var seconds = PlayerPrefs.GetFloat("record", 100000f);
         time.text = TimeSpan.FromSeconds(seconds).ToString(@"m\:ss");
         steps.text = PlayerPrefs.GetInt("steps", 9999).ToString();
-        var scoreSec = seconds - 30;
+        var scoreSec = seconds - 25;
         if (scoreSec <= 0)
             scoreSec = 1;
         score.text = ((int)(100000f / scoreSec)).ToString();

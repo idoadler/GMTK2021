@@ -38,6 +38,8 @@ public class ClimbAnimation : MonoBehaviour {
 
     public void SetSide(bool left)
     {
+        if(killed)
+            return;
         isLeft = left;        
         timeToSwitch = 1/jumpFps;
         index = -1;

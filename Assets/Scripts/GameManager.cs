@@ -3,13 +3,13 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
-    public static bool Scroll = true;
+    
+    public static bool firstTime = true;
     
     public float stepSize = 0.5f;
     public float stepTime = 0.2f;
@@ -81,20 +81,12 @@ public class GameManager : MonoBehaviour
         timeText.text = time.ToString(@"m\:ss");
         
         fire.transform.localPosition += Vector3.up * (fireSpeed * Time.deltaTime);
-        if(Scroll)
-            couple.transform.position += Vector3.down * (scrollSpeed * currentAcceleration * Time.deltaTime);
+        couple.transform.position += Vector3.down * (scrollSpeed * currentAcceleration * Time.deltaTime);
         for (int i = 0; i < letters.Length; i++)
         {
             if(Input.GetKeyDown(letters[i].code))
                 Press(i);
         }
-        //
-        // if (topLetter + 1 < letters.Length &&
-        //     coupleTop.transform.position.y > letters[topLetter + 1].buttonAi.transform.position.y)
-        // {
-        //     currentAcceleration *= acceleration;
-        //     topLetter++;
-        // }
 
         if (coupleBottom.transform.position.y < lowerBound.transform.position.y)
         {
@@ -141,6 +133,7 @@ public class GameManager : MonoBehaviour
         RandomizeLetter();
         running = true;
         timer = DateTime.Now;
+        firstTime = false;
     }
     
     public void Press(int index)
@@ -152,7 +145,7 @@ public class GameManager : MonoBehaviour
         effects.pitch = 0.5f + Random.value;
         if (index == currentLetter)
         {        
-            effects.clip = aiVoice;
+            effects.clip = voiceEffects[Random.Range(0, voiceEffects.Length)];
             Succeed();
         }
         else
@@ -198,9 +191,9 @@ public class GameManager : MonoBehaviour
         letters[currentLetter].text.color = Color.white;
         letters[currentLetter].buttonAi.sprite = ai;
         _climbAnimation.SetSide(false);
-        effects.pitch = 0.5f + Random.value;
-        effects.clip = voiceEffects[Random.Range(0, voiceEffects.Length)];
-        effects.Play();
+        // effects.pitch = 0.5f + Random.value;
+        // effects.clip = aiVoice;
+        // effects.Play();
     }
     
     IEnumerator Hop(float hopHeight, float time) {
@@ -218,6 +211,8 @@ public class GameManager : MonoBehaviour
     IEnumerator StartScene(float time)
     {
         running = false;
+        if(!firstTime)
+            tutorial.SetActive(false);
         var timer = 0.0f;
         blackFade.gameObject.SetActive(true);
         while (timer <= 1)
@@ -227,6 +222,8 @@ public class GameManager : MonoBehaviour
             yield return null;
         }
         blackFade.gameObject.SetActive(false);
+        if(!firstTime)
+            EndTutorial();
     }
     
     IEnumerator EndScene(float time, int scene)
@@ -236,6 +233,8 @@ public class GameManager : MonoBehaviour
         blackFade.gameObject.SetActive(true);
         while (timer <= 1)
         {
+            if(scene == 0)
+                couple.transform.position += Vector3.down * (scrollSpeed * 6 * Time.deltaTime *(1+timer)*(1+timer)*(1+timer));
             mainAudio.volume = (1 - timer) * (1 - timer);
             blackFade.color = new Color(0, 0, 0, timer);
             timer += Time.deltaTime / time;
