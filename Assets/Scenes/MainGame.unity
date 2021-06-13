@@ -4218,7 +4218,7 @@ MonoBehaviour:
   fallTime: 0.1
   acceleration: 1.2
   scrollSpeed: 0.1
-  fireSpeed: 8
+  fireSpeed: 7.5
   timeToNextInput: 0.3
   fadeTime: 1
   timeText: {fileID: 543765332}
